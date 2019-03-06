@@ -166,6 +166,9 @@ class TACSAssembler : public TACSObject {
   // Set the Dirichlet boundary conditions to the state vector
   void setBCs( TACSVec *vec );
 
+  // Get the Flow nodes on the BC
+  int getFlowBCNodes( const int** );
+
   // Methods for manipulating internal variable values
   // -------------------------------------------------
   void zeroVariables();

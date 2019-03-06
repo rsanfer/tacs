@@ -2806,6 +2806,16 @@ void TACSAssembler::setBCs( TACSVec *vec ){
   vec->applyBCs(bcMap, varsVec); 
 }
 
+/*
+  Return the indices corresponding to flow BC nodes
+*/
+int TACSAssembler::getFlowBCNodes( const int **flow_nodes ){
+  const int *_flow_nodes;
+  int nflowbcs = bcMap->getFlowBCs(&_flow_nodes);
+  if (flow_nodes){ *flow_nodes = _flow_nodes; }
+  return nflowbcs;
+}
+
 /*!
   Create a distributed matrix
 

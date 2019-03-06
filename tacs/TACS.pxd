@@ -396,6 +396,9 @@ cdef extern from "TACSAssembler.h":
         void applyBCs(TACSVec*)
         void applyBCs(TACSMat*)
 
+        # Get the indices of the interface
+        int getFlowBCNodes(const int **flow_nodes);
+
         # Zero the variables
         void zeroVariables()
         void zeroDotVariables()

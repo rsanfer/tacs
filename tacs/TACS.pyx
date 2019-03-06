@@ -983,6 +983,22 @@ cdef class Assembler:
         self.ptr.applyBCs(vec.ptr)
         return
 
+    def getBCNodeArray(self):
+        '''
+        Get the indices of the flow BC nodes
+        '''
+        cdef int nnodes = 0
+        cdef const int *node_ptr
+
+        nnodes = self.ptr.getFlowBCNodes(&node_ptr)
+
+        cdef np.ndarray np_node_ptr = np.zeros(nnodes, dtype=np.int)
+        if node_ptr is not NULL:
+            for i in range(nnodes):
+                np_node_ptr[i] = node_ptr[i]
+
+        return nnodes, np_node_ptr
+
     def applyMatBCs(self, Mat mat):
         '''Apply boundary conditions to the matrix'''
         self.ptr.applyBCs(mat.ptr)

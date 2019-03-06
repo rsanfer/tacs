@@ -53,6 +53,11 @@ class TACSBcMap : public TACSObject {
               const int **_vars, 
               const TacsScalar **_values );
 
+  // Add/get the flow boundary conditions stored in this object
+  // -----------------------------------------------------
+  void addFlowBC( int node );
+  int getFlowBCs( const int **_nodes);
+
   // Get the node numbers associated with the BCs for reordering
   // -----------------------------------------------------------
   int getBCNodeNums( int **_nodes );
@@ -78,6 +83,10 @@ class TACSBcMap : public TACSObject {
   // Set the boundary condition sizes
   int max_size;
   int bc_increment;
+
+  // Information used to apply flow boundary conditions
+  int *flow_nodes;
+  int nflownodes;
 };
 
 /*!

@@ -812,6 +812,9 @@ TACSAssembler* TACSCreator::createTACS(){
       if (n > 0){
         tacs->addBCs(1, &bc_nodes[k], n, bvars, bvals);
       }
+      else{
+        tacs->addFlowBCs(1, &bc_nodes[k]);
+      }
     }
   }
 

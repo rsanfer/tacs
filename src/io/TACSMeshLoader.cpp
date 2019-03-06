@@ -933,6 +933,10 @@ int TACSMeshLoader::scanBDFFile( const char * file_name ){
           bc_vars_size += 8;
           num_bcs++;
         }
+        else if (strncmp(line[0], "FLOWBC", 6) == 0){
+          bc_vars_size += 8;
+          num_bcs++;
+        }
         else if (strncmp(line[0], "FFORCE", 6) == 0){     
           // Read in the component number and nodes associated 
           // with this element
@@ -1404,6 +1408,21 @@ int TACSMeshLoader::scanBDFFile( const char * file_name ){
             }
           }
           
+          bc_ptr[num_bcs+1] = bc_vars_size;
+          num_bcs++;
+        }
+        else if (strncmp(line[0], "FLOWBC", 6) == 0){
+          // This is a variable-length format. Read in only grid points
+          // FLOWBC SID  G1
+
+          // Read in the nodal value
+          char node[9];
+          strncpy(node, &line[0][16], 8);
+          node[8] = '\0';
+          bc_nodes[num_bcs] = atoi(node)-1;
+
+          strncpy(node, &line[0][32], 8);
+          node[8] = '\0';
           bc_ptr[num_bcs+1] = bc_vars_size;
           num_bcs++;
         }

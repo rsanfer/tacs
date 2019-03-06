@@ -690,6 +690,31 @@ void TACSAssembler::addInitBCs( int nnodes, const int *nodes,
   }
 }
 
+/*!
+  Add the flow boundary conditions to the BC object that is associated
+  with the vectors/matrices created using TACSAssembler.
+*/
+void TACSAssembler::addFlowBCs( int nnodes, const int *nodes){
+
+  if (meshInitializedFlag){
+    fprintf(stderr, "[%d] Cannot call addFlowBCs() after initialize()\n",
+            mpiRank);
+    return;
+  }
+
+  // Get the ownership range
+  const int *ownerRange;
+  varMap->getOwnerRange(&ownerRange);
+
+  // Add all the boundary conditions within the specified owner range
+  for ( int i = 0; i < nnodes; i++ ){
+    if (nodes[i] >= ownerRange[mpiRank] &&
+        nodes[i] < ownerRange[mpiRank+1]){
+        bcMap->addFlowBC(nodes[i]);
+    }
+  }
+
+}
 /*
   Create a global vector of node locations
 */

@@ -46,9 +46,11 @@ TACSBcMap::TACSBcMap( int _bsize, int num_bcs ){
   bc_increment = max_size+1;
 
   nbcs = 0;
+  nflownodes = 0;
   nodes = new int[ max_size ];
   vars = new int[ max_size ];
   values = new TacsScalar[ bsize*max_size ];
+  flow_nodes = new int[ max_size ];
 }
 
 /*
@@ -59,6 +61,7 @@ TACSBcMap::~TACSBcMap(){
   delete [] nodes;
   delete [] vars;  
   delete [] values;
+  delete [] flow_nodes;
 }
 
 /*
@@ -185,6 +188,47 @@ int TACSBcMap::getBCs( const int **_nodes,
 int TACSBcMap::getBCNodeNums( int **_nodes ){
   if (_nodes){ *_nodes = nodes; }
   return nbcs;
+}
+
+/*
+  Add a Flow boundary condition for the specified global variable number.
+
+  input:
+  node:       the global node number
+*/
+void TACSBcMap::addFlowBC( int node ){
+  // If the number of boundary conditions exceeds the available
+  // space, allocate more space and copy over the arrays
+  if (nflownodes >= max_size){
+    max_size = max_size + bc_increment;
+    int *temp_flow_nodes = new int[ max_size ];
+    memcpy(temp_flow_nodes, flow_nodes, nflownodes*sizeof(int));
+
+    // Free the old arrays
+    delete [] flow_nodes;
+
+    // Copy over the new arrays
+    flow_nodes = temp_flow_nodes;
+  }
+
+  // Set the new variable information
+  flow_nodes[nflownodes] = node;
+
+  // Increment the boundary conditions
+  nflownodes++;
+
+}
+
+/*
+  Retrieve the boundary conditions that have been set locally within
+  this object
+
+  output:
+  flow_nodes:  the global node numbers that have a flow BC applied
+*/
+int TACSBcMap::getFlowBCs( const int **_flow_nodes ){
+  if (_flow_nodes){ *_flow_nodes = flow_nodes; }
+  return nflownodes;
 }
 
 /*

@@ -99,6 +99,10 @@ class TACSAssembler : public TACSObject {
                    int nbcs=-1, const int *vars=NULL, 
                    const TacsScalar *vals=NULL );
 
+  // Associate a Dirichlet boundary condition with the given variables
+  // -----------------------------------------------------------------
+  void addFlowBCs( int nnodes, const int *nodes);
+
   // Reorder the unknowns according to the specified reordering
   // ----------------------------------------------------------
   void computeReordering( OrderingType order_type, 
